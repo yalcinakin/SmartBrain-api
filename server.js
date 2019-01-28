@@ -1,11 +1,3 @@
-/*
-/   res= Working
-/signin  POST = success/fail
-/register  POST = user
-/profile/:userid  GET = user
-/image   PUT user
-
-*/
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -21,10 +13,8 @@ const image = require('./controllers/image');
 const db = knex({
   client: 'pg',
   connection: {
-    host : '127.0.0.1',
-    user : 'postgres',
-    password : '12345',
-    database : 'smart-brain'
+    connectionString : 'process.env.DATABASE_URL',
+    ssl: true,
   }
 });
 
@@ -50,7 +40,31 @@ app.listen(process.env.PORT || 3000, () => {  //3000
   console.log(`app is running on PORT ${process.env.PORT}`);
 });
 
+/*
+/   res= Working
+/signin  POST = success/fail
+/register  POST = user
+/profile/:userid  GET = user
+/image   PUT user
 
+*/
+
+//// Postgres Database tables
+// CREATE TABLE login
+// (
+//     id serial PRIMARY KEY,
+//     hash varchar(100) NOT NULL,
+//     email text UNIQUE NOT NULL
+// );
+//
+// CREATE TABLE users
+// (
+//     id serial PRIMARY KEY,
+//     name varchar(100),
+//     email text UNIQUE NOT NULL,
+//     entries bigint DEFAULT 0,
+//     joined timestamp NOT NULL
+// );
 
 
 // db.select('*').from('users').then(data => {
