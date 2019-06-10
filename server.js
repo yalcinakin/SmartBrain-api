@@ -1,9 +1,11 @@
 
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const knex = require('knex');
+const morgan = require('morgan');
 
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
@@ -12,23 +14,16 @@ const image = require('./controllers/image');
 
 const db = knex({
   client: 'pg',
-  connection: {
-    host : '127.0.0.1',
-    user : 'postgres',
-    password : '12345',
-    database : 'smart-brain'
-  }
+  connection: process.env.POSTGRES_URI
 });
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
+app.use(morgan('combined'));
 
 app.get('/', (req, res) => {
-  res.send('it is working!!!')
-  // db.select('*').from('users').then(data => {
-  //   res.json(data);
-  // });
+  res.send('it is working');
 })
 
 app.post('/signin', signin.handleSignin(db, bcrypt))
@@ -42,64 +37,10 @@ app.listen(process.env.PORT || 3001, () => {  //3001
   console.log(`app is running on PORT ${process.env.PORT}`);
 });
 
-/*
-/   res= Working
-/signin  POST = success/fail
-/register  POST = user
-/profile/:userid  GET = user
-/image   PUT user
-
-*/
-
-//// Postgres Database tables
-// CREATE TABLE login
-// (
-//     id serial PRIMARY KEY,
-//     hash varchar(100) NOT NULL,
-//     email text UNIQUE NOT NULL
-// );
-//
-// CREATE TABLE users
-// (
-//     id serial PRIMARY KEY,
-//     name varchar(100),
-//     email text UNIQUE NOT NULL,
-//     entries bigint DEFAULT 0,
-//     joined timestamp NOT NULL
-// );
-
 
 // db.select('*').from('users').then(data => {
 //   console.log(data);
 // });
-
-// const database = {
-//   users: [
-//     {
-//       id: '123',
-//       name: 'John',
-//       email: 'john@gmail.com',
-//       password: 'cookies',
-//       entries: 0,
-//       joined: new Date()
-//     },
-//     {
-//       id: '124',
-//       name: 'Sally',
-//       email: 'sally@gmail.com',
-//       password: 'bananas',
-//       entries: 0,
-//       joined: new Date()
-//     }
-//   ],
-//   login: [
-//     {
-//       id: "987",
-//       hash: "",
-//       email: "john@gmail.com"
-//     }
-//   ]
-// }
 
 // // Load hash from your password DB.
 // bcrypt.compare("bacon", hash, function(err, res) {

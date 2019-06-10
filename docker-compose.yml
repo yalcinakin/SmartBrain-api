@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+
+  #BackEnd API
+  smartbrain-api:
+    container_name: backend
+    build: ./
+    command: npm start
+    working_dir: /usr/src/smartbrain-api
+    environment:
+      POSTGRES_URI: postgres://<user>:<password>@postgres:5432/smart-brain-docker
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./:/usr/src/smartbrain-api
+
+  #Postgres
+  postgres:
+    #container_name: postgres we dont need it
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: <user>
+      POSTGRES_PASSWORD: <password>
+      POSTGRES_DB: smart-brain-docker
+    build: ./postgres
+    ports:
+      - 5432
