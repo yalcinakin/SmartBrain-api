@@ -11,6 +11,7 @@ const redisClient = redis.createClient(process.env.REDIS_URI);
 
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
+const signout = require('./controllers/signout');
 const profile = require('./controllers/profile.js');
 const image = require('./controllers/image');
 const auth = require('./controllers/authorization');
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
   res.send('it is working');
 });
 app.post('/signin', signin.signinAuthentication(db, redisClient, bcrypt))
+app.delete('/signout', signout.deleteToken(redisClient))
 app.post('/register', (req, res) => {register.handleRegister(req, res, db, bcrypt)})
 app.get('/profile/:id', auth.requireAuth(redisClient), (req, res) => { profile.handleProfileGet(req, res, db)})
 app.post('/profile/:id', auth.requireAuth(redisClient), (req, res) => {profile.handleProfileUpdate(req, res, db)})
