@@ -9,7 +9,7 @@ services:
     command: npm start
     working_dir: /usr/src/smartbrain-api
     environment:
-      POSTGRES_URI: postgres://<use>:<password>@postgres:5432/smart-brain-docker
+      POSTGRES_URI: postgres://<user>:<password>@postgres:5432/smart-brain-docker
       REDIS_URI: redis://redis:6379
     ports:
       - "3001:3001"
